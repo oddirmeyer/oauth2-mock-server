@@ -158,7 +158,7 @@ class OAuth2Service extends events_1.EventEmitter {
                 .json(tokenEndpointResponse.body);
         };
         this.authorizeHandler = (req, res) => {
-            const { scope, state } = req.query;
+            let { scope, state } = req.query;
             const responseType = req.query.response_type;
             const redirectUri = req.query.redirect_uri;
             const code = uuid_1.v4();
@@ -168,8 +168,12 @@ class OAuth2Service extends events_1.EventEmitter {
                 queryNonce = req.query.nonce;
             }
             helpers_1.assertIsString(redirectUri, 'Invalid redirectUri type');
-            helpers_1.assertIsString(scope, 'Invalid scope type');
-            helpers_1.assertIsString(state, 'Invalid state type');
+            if (typeof scope !== 'string' || !scope) {
+                scope = 'dummy';
+            }
+            if (typeof state !== 'string' || !state) {
+                state = 'dummy';
+            }
             const url = new URL(redirectUri);
             if (responseType === 'code') {
                 if (queryNonce !== undefined) {

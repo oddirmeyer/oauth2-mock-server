@@ -272,7 +272,7 @@ export class OAuth2Service extends EventEmitter {
   };
 
   private authorizeHandler: RequestHandler = (req, res) => {
-    const { scope, state } = req.query;
+    let { scope, state } = req.query;
     const responseType = req.query.response_type;
     const redirectUri = req.query.redirect_uri;
     const code = uuidv4();
@@ -285,8 +285,13 @@ export class OAuth2Service extends EventEmitter {
     }
 
     assertIsString(redirectUri, 'Invalid redirectUri type');
-    assertIsString(scope, 'Invalid scope type');
-    assertIsString(state, 'Invalid state type');
+
+    if (typeof scope !== 'string' || !scope) {
+      scope = 'dummy';
+    }
+    if (typeof state !== 'string' || !state) {
+      state = 'dummy';
+    }
 
     const url = new URL(redirectUri);
 
