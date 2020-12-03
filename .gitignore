@@ -2,4 +2,6 @@ node_modules/
 TestResults/
 .vscode
 .cache/
-dist/
+
+# Commented out in fork to fix dependency resolution when pulled in as Git depedency (vs published build to npmjs)
+#dist/
